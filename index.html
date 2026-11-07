@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chayana · నాకు నచ్చినవి</title>
+<meta name="description" content="Chayana: a collection of videos, articles, info and quotes I liked.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@500&family=Noto+Serif+Devanagari:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --muted: #6b6b70;
+    --line: #e6e6e3;
+    --accent: #2f6fde;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 48px 20px 64px; }
+  header h1 { font-size: 2.6rem; letter-spacing: -0.02em; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  header h1 .dev { font-family: "Noto Serif Devanagari", serif; font-size: 1.6rem; color: var(--muted); font-weight: 600; }
+  header .tagline { font-size: 1.2rem; margin-top: 4px; }
+  header .tagline .te { font-family: "Noto Sans Telugu", sans-serif; font-weight: 500; }
+  header .meaning { color: var(--muted); margin-top: 10px; font-size: 0.95rem; max-width: 620px; }
+
+  .card.quote .body { padding: 26px 24px 22px; background: #fbf7ef; }
+  .card.quote blockquote { font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; line-height: 1.5; color: var(--text); }
+  .card.quote blockquote::before { content: "\201C"; display: block; font-size: 3rem; line-height: 0.6; color: #d4a03a; margin-bottom: 8px; }
+  .card.quote .by { color: var(--muted); font-size: 0.92rem; margin-top: 6px; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 24px; }
+  .filters button {
+    font: inherit; font-size: 0.9rem;
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text);
+    cursor: pointer;
+  }
+  .filters button.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .card.fav { border-color: #f0c45a; }
+  .video { position: relative; aspect-ratio: 16 / 9; background: #000; cursor: pointer; }
+  .video img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
+  .video .play {
+    position: absolute; inset: 0; display: grid; place-items: center;
+  }
+  .video .play span {
+    width: 64px; height: 44px; border-radius: 12px; background: rgba(255,0,0,0.9);
+    display: grid; place-items: center; color: #fff; font-size: 20px;
+  }
+  .video iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .meta { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .card h2 { font-size: 1.05rem; line-height: 1.35; }
+  .card h2 a { color: inherit; text-decoration: none; }
+  .card h2 a:hover { color: var(--accent); }
+  .note { color: #3a3a3f; font-size: 0.95rem; }
+  .source { margin-top: auto; padding-top: 8px; font-size: 0.85rem; }
+  .source a { color: var(--accent); text-decoration: none; }
+  .empty { color: var(--muted); padding: 40px 0; }
+  footer { margin-top: 56px; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Chayana <span class="dev">चयन</span></h1>
+    <p class="tagline"><span class="te">నాకు నచ్చినవి</span> · Things I liked</p>
+    <p class="meaning">From the Sanskrit root <em>chi</em>, "to gather": a collection of videos, articles, info and quotes I picked up along the way, each with a note on why I liked it.</p>
+  </header>
+
+  <nav class="filters" id="filters"></nav>
+  <main class="grid" id="grid"></main>
+
+  <footer>All videos and articles belong to their creators. Links open the original source.</footer>
+</div>
+
+<script>
+/* =========================================================
+   YOUR LINKS: add new ones at the TOP of this list.
+   Copy one block { ... }, paste it, and change the text.
+
+   type:     "video" (YouTube), "article" (any other link) or "quote"
+   url:      the full link (not needed for quotes)
+   title:    what it's called (for quotes: the quote itself)
+   by:       who said it (quotes only)
+   note:     why you liked it (one or two sentences, optional for quotes)
+   category: any word, e.g. Learning, Tech, Music, Fun, Wisdom
+   date:     "YYYY-MM-DD"
+   favorite: true to highlight it (optional)
+   ========================================================= */
+const links = [
+  {
+    type: "quote",
+    title: "Arise, awake, and stop not till the goal is reached.",
+    by: "Swami Vivekananda",
+    note: "Example quote: replace it with your own.",
+    category: "Wisdom",
+    date: "2026-11-06"
+  },
+  {
+    type: "video",
+    url: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+    title: "Me at the zoo",
+    note: "The very first video ever uploaded to YouTube. Example entry: replace it with your own.",
+    category: "Fun",
+    date: "2026-11-06",
+    favorite: true
+  },
+  {
+    type: "article",
+    url: "https://pages.github.com/",
+    title: "GitHub Pages",
+    note: "How this website is hosted, for free. Example entry: replace it with your own.",
+    category: "Tech",
+    date: "2026-11-06"
+  },
+  {
+    type: "article",
+    url: "https://en.wikipedia.org/wiki/World_Wide_Web",
+    title: "World Wide Web",
+    note: "A good overview of how the web began. Example entry: replace it with your own.",
+    category: "Learning",
+    date: "2026-11-06"
+  }
+];
+
+/* ---------- You don't need to edit anything below ---------- */
+function youtubeId(url) {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function host(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return url; }
+}
+function esc(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function niceDate(d) {
+  const dt = new Date(d + "T00:00:00");
+  return isNaN(dt) ? "" : dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+const sorted = [...links].sort((a, b) => (b.favorite === true) - (a.favorite === true) || String(b.date).localeCompare(String(a.date)));
+const categories = ["All", "Videos", "Articles", "Quotes", ...new Set(links.map(l => l.category).filter(Boolean))];
+let current = "All";
+
+function render() {
+  const grid = document.getElementById("grid");
+  const items = sorted.filter(l =>
+    current === "All" ||
+    (current === "Videos" && l.type === "video") ||
+    (current === "Articles" && l.type === "article") ||
+    (current === "Quotes" && l.type === "quote") ||
+    l.category === current
+  );
+  if (!items.length) { grid.innerHTML = '<p class="empty">Nothing here yet.</p>'; return; }
+
+  grid.innerHTML = items.map(l => {
+    if (l.type === "quote") {
+      return `
+      <article class="card quote${l.favorite ? " fav" : ""}">
+        <div class="body">
+          <div class="meta">${l.favorite ? "&#9733; " : ""}${esc(l.category)}${l.date ? " &middot; " + niceDate(l.date) : ""}</div>
+          <blockquote>${esc(l.title)}</blockquote>
+          ${l.by ? `<p class="by">— ${esc(l.by)}</p>` : ""}
+          ${l.note ? `<p class="note">${esc(l.note)}</p>` : ""}
+          ${l.url ? `<div class="source"><a href="${esc(l.url)}" target="_blank" rel="noopener">${host(l.url)} &rarr;</a></div>` : ""}
+        </div>
+      </article>`;
+    }
+    const id = l.type === "video" ? youtubeId(l.url) : null;
+    const media = id ? `
+      <div class="video" data-id="${id}" title="Play video">
+        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="" loading="lazy">
+        <div class="play"><span>&#9658;</span></div>
+      </div>` : "";
+    return `
+      <article class="card${l.favorite ? " fav" : ""}">
+        ${media}
+        <div class="body">
+          <div class="meta">${l.favorite ? "&#9733; " : ""}${esc(l.category)}${l.date ? " &middot; " + niceDate(l.date) : ""}</div>
+          <h2><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></h2>
+          <p class="note">${esc(l.note)}</p>
+          <div class="source"><a href="${esc(l.url)}" target="_blank" rel="noopener">${id ? "Watch on YouTube" : host(l.url)} &rarr;</a></div>
+        </div>
+      </article>`;
+  }).join("");
+
+  grid.querySelectorAll(".video").forEach(v => v.addEventListener("click", () => {
+    v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.dataset.id}?autoplay=1"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  }));
+}
+
+function renderFilters() {
+  document.getElementById("filters").innerHTML = categories.map(c =>
+    `<button class="${c === current ? "active" : ""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  document.querySelectorAll("#filters button").forEach(b => b.addEventListener("click", () => {
+    current = b.dataset.c; renderFilters(); render();
+  }));
+}
+
+renderFilters();
+render();
+</script>
+</body>
+</html>
